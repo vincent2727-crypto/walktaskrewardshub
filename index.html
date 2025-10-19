@@ -4,16 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WalkTask – Earn While You Walk</title>
-
-  <!-- Google Analytics GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LC6DM2P7CN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-LC6DM2P7CN');
-  </script>
-
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -115,99 +105,126 @@
       padding: 1rem;
       margin: 0;
     }
+    .visitor-counter {
+      margin: 20px 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
 
-<header>🚶‍♂️ WalkTask – Earn While You Walk</header>
+  <header>🚶‍♂️ WalkTask – Earn While You Walk</header>
 
-<div class="container">
-  <h2>Turn Your Daily Steps Into Rewards 💰</h2>
-  <p>
-    Join thousands of users walking their way to real rewards with <strong>WalkTask</strong>.<br>
-    Walk daily, collect points, and redeem for <strong>PayPal, Amazon, and other gift cards</strong>.
-  </p>
+  <div class="container">
+    <h2>Turn Your Daily Steps Into Rewards 💰</h2>
+    <p>
+      Join thousands of users walking their way to real rewards with <strong>WalkTask</strong>.<br>
+      Walk daily, collect points, and redeem for <strong>PayPal, Amazon, and other gift cards</strong>.<br>
+      <strong>Sign up now and get $10 instantly!</strong>
+    </p>
 
-  <!-- Referral Code + Copy Button -->
-  <div class="code-box">
-    <span class="code" id="inviteCode">9EUJPX</span>
-    <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+    <!-- Referral Code + Copy Button -->
+    <div class="code-box">
+      <span class="code" id="inviteCode">9EUJPX</span>
+      <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+    </div>
+
+    <!-- Visitor Counter -->
+    <div class="visitor-counter">
+      👀 Visitors so far: <span id="visitorCount">0</span>
+    </div>
+
+    <!-- Vimeo Video -->
+    <div class="video">
+      <iframe id="walktaskVideo" src="https://player.vimeo.com/video/1128562366?autoplay=1&muted=1&background=0" allow="autoplay; fullscreen" allowfullscreen title="WalkTask Video"></iframe>
+      <div class="unmute-btn" id="unmuteBtn">🔊 Tap to Unmute</div>
+    </div>
+
+    <!-- Download Buttons -->
+    <a class="btn" id="androidBtn" href="https://walktask.app/invite?code=9EUJPX" target="_blank">📱 Download for Android</a>
+    <a class="btn" id="iosBtn" href="https://apps.apple.com/us/app/walktask-walk-work-gets-paid/id6636529552" target="_blank">🍎 Download for iPhone</a>
+
+    <h3>💡 Why You’ll Love WalkTask</h3>
+    <ul>
+      <li>✅ Earn rewards automatically as you walk</li>
+      <li>✅ Track your daily progress</li>
+      <li>✅ Withdraw easily via PayPal or gift cards</li>
+      <li>✅ Invite friends for bonus earnings</li>
+    </ul>
   </div>
 
-  <!-- Vimeo Video -->
-  <div class="video">
-    <iframe id="walktaskVideo" src="https://player.vimeo.com/video/1128562366?autoplay=1&muted=1&background=0" allow="autoplay; fullscreen" title="WalkTask Video"></iframe>
-    <div class="unmute-btn" id="unmuteBtn">🔊 Tap to Unmute</div>
-  </div>
+  <footer>
+    © 2025 WalkTask Promo Page | Independent fan page, WalkTask Inc.
+  </footer>
 
-  <!-- Download Buttons with Tracking -->
-  <a class="btn" href="https://walktask.app/invite?code=9EUJPX" target="_blank" onclick="trackClick('android')">📱 Download for Android</a>
-  <a class="btn" href="https://apps.apple.com/us/app/walktask-walk-work-gets-paid/id6636529552" target="_blank" onclick="trackClick('iphone')">🍎 Download for iPhone</a>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LC6DM2P7CN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LC6DM2P7CN');
+  </script>
 
-  <h3>💡 Why You’ll Love WalkTask</h3>
-  <ul>
-    <li>✅ Earn rewards automatically as you walk</li>
-    <li>✅ Track your daily progress</li>
-    <li>✅ Withdraw easily via PayPal or gift cards</li>
-    <li>✅ Invite friends for bonus earnings</li>
-  </ul>
+  <!-- Vimeo Player API & Custom JS -->
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script>
+    const iframe = document.getElementById('walktaskVideo');
+    const player = new Vimeo.Player(iframe);
+    const unmuteBtn = document.getElementById('unmuteBtn');
+    const inviteCodeBtn = document.querySelector('.copy-btn');
+    const androidBtn = document.getElementById('androidBtn');
+    const iosBtn = document.getElementById('iosBtn');
+    const visitorCountEl = document.getElementById('visitorCount');
 
-  <!-- Visitor Counter -->
-  <p>Visitors: <span id="visitorCount">0</span></p>
-</div>
+    // Unmute & restart video
+    unmuteBtn.addEventListener('click', async () => {
+      try {
+        await player.setVolume(1);
+        await player.setCurrentTime(0);
+        await player.play();
+        unmuteBtn.style.opacity = '0';
+        setTimeout(() => unmuteBtn.remove(), 300);
+      } catch(err) {
+        console.error('Vimeo error:', err);
+      }
+    });
 
-<footer>
-  © 2025 WalkTask Promo Page | Independent fan page, WalkTask Inc.
-</footer>
+    // Ensure autoplay works
+    player.on('loaded', () => {
+      player.play().catch(err => console.warn('Autoplay prevented:', err));
+    });
 
-<script src="https://player.vimeo.com/api/player.js"></script>
-<script>
-  const iframe = document.getElementById('walktaskVideo');
-  const player = new Vimeo.Player(iframe);
-  const unmuteBtn = document.getElementById('unmuteBtn');
-
-  // Unmute + restart video
-  unmuteBtn.addEventListener('click', async () => {
-    await player.setVolume(1);
-    await player.setCurrentTime(0);
-    await player.play();
-    unmuteBtn.style.opacity = '0';
-    setTimeout(() => unmuteBtn.remove(), 300);
-  });
-
-  // Copy referral code + GA tracking
-  function copyCode() {
-    const codeText = document.getElementById('inviteCode').innerText;
-    navigator.clipboard.writeText(codeText).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = '✅ Copied!';
-      setTimeout(() => (btn.textContent = '📋 Copy Code'), 2000);
-
-      // GA event
-      gtag('event', 'copy_referral_code', {
-        'event_category': 'referral',
-        'event_label': codeText
+    // Copy referral code
+    function copyCode() {
+      const codeText = document.getElementById('inviteCode').innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        inviteCodeBtn.textContent = '✅ Copied!';
+        gtag('event', 'copy_referral_code', { 'code': codeText });
+        setTimeout(() => (inviteCodeBtn.textContent = '📋 Copy Code'), 2000);
       });
-      console.log('Referral code copied: ' + codeText);
-    });
-  }
+    }
 
-  // Track button clicks in GA
-  function trackClick(platform){
-    gtag('event', 'click_install', {
-      'event_category': 'referral',
-      'event_label': platform
+    // Track clicks on app download buttons
+    androidBtn.addEventListener('click', () => {
+      gtag('event', 'click_install', { 'platform': 'Android' });
     });
-    console.log(platform + ' button clicked');
-  }
+    iosBtn.addEventListener('click', () => {
+      gtag('event', 'click_install', { 'platform': 'iOS' });
+    });
 
-  // Visitor counter using countapi.xyz
-  fetch('https://api.countapi.xyz/hit/walktaskrewardshub.com/visits')
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('visitorCount').innerText = data.value;
-    });
-</script>
+    // Visitor Counter with CountAPI
+    const namespace = 'walktaskrewardshub';
+    const key = 'visits';
+    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+      .then(res => res.json())
+      .then(data => {
+        visitorCountEl.textContent = data.value;
+        gtag('event', 'visitor_count', { 'count': data.value });
+      })
+      .catch(err => console.error('Visitor counter error:', err));
+  </script>
 
 </body>
 </html>
