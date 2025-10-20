@@ -46,7 +46,8 @@
       border-radius: 30px;
       cursor: pointer;
       font-size: 1rem;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.5s ease;
+      z-index: 10;
     }
     .btn {
       display: inline-block;
@@ -130,9 +131,9 @@
       <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
     </div>
 
-    <!-- Social Proof Visitor Counter -->
+    <!-- Animated Visitor Counter -->
     <div class="visitor-counter">
-      👀 Visitors so far: <span id="visitorCount">2,345</span>
+      👀 Visitors so far: <span id="visitorCount">3091</span>
     </div>
 
     <!-- Vimeo Video -->
@@ -178,14 +179,15 @@
     const iosBtn = document.getElementById('iosBtn');
     const visitorCountEl = document.getElementById('visitorCount');
 
-    // Unmute & restart video
+    // Unmute & restart video (fixed)
     unmuteBtn.addEventListener('click', async () => {
       try {
         await player.setVolume(1);
-        await player.setCurrentTime(0);
         await player.play();
         unmuteBtn.style.opacity = '0';
-        setTimeout(() => unmuteBtn.remove(), 300);
+        setTimeout(() => {
+          if (unmuteBtn.parentNode) unmuteBtn.remove();
+        }, 500);
       } catch(err) {
         console.error('Vimeo error:', err);
       }
@@ -214,9 +216,18 @@
       gtag('event', 'click_install', { 'platform': 'iOS' });
     });
 
-    // Social proof number (static)
-    const socialProofNumber = 2345; // <-- change this to any number you want
-    visitorCountEl.textContent = socialProofNumber;
+    // Animate visitor counter from 3091 to 3095
+    let current = 3091;
+    const target = 3095;
+    const interval = 400; // ms
+    function animateVisitorCount() {
+      if(current < target) {
+        current++;
+        visitorCountEl.textContent = current;
+        setTimeout(animateVisitorCount, interval);
+      }
+    }
+    window.addEventListener('load', animateVisitorCount);
   </script>
 
 </body>
