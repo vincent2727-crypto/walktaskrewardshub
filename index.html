@@ -35,6 +35,19 @@
       border-radius: 12px;
       border: none;
     }
+    .unmute-btn {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: opacity 0.3s ease;
+    }
     .btn {
       display: inline-block;
       margin: 10px;
@@ -117,42 +130,15 @@
       <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
     </div>
 
-    <!-- Visitor Counter -->
+    <!-- Social Proof Visitor Counter -->
     <div class="visitor-counter">
-      👀 Visitors so far: <span id="visitorCount">0</span>
+      👀 Visitors so far: <span id="visitorCount">2,345</span>
     </div>
 
-    <!-- Vimeo Video with Play Overlay -->
-    <div class="video" id="videoContainer" style="position: relative;">
-      <iframe id="walktaskVideo"
-              src="https://player.vimeo.com/video/1128562366?autoplay=1&muted=1&background=0"
-              allow="autoplay; fullscreen"
-              allowfullscreen
-              title="WalkTask Video"></iframe>
-      <!-- Big Play Overlay -->
-      <div id="playOverlay" style="
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 80px;
-          height: 80px;
-          background: rgba(0,0,0,0.6);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 10;
-      ">
-        <div style="
-            width: 0;
-            height: 0;
-            border-left: 25px solid white;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-        "></div>
-      </div>
+    <!-- Vimeo Video -->
+    <div class="video">
+      <iframe id="walktaskVideo" src="https://player.vimeo.com/video/1128562366?autoplay=1&muted=1&background=0" allow="autoplay; fullscreen" allowfullscreen title="WalkTask Video"></iframe>
+      <div class="unmute-btn" id="unmuteBtn">🔊 Tap to Unmute</div>
     </div>
 
     <!-- Download Buttons -->
@@ -186,21 +172,28 @@
   <script>
     const iframe = document.getElementById('walktaskVideo');
     const player = new Vimeo.Player(iframe);
+    const unmuteBtn = document.getElementById('unmuteBtn');
     const inviteCodeBtn = document.querySelector('.copy-btn');
     const androidBtn = document.getElementById('androidBtn');
     const iosBtn = document.getElementById('iosBtn');
     const visitorCountEl = document.getElementById('visitorCount');
-    const playOverlay = document.getElementById('playOverlay');
 
-    // Play overlay click to unmute & start video
-    playOverlay.addEventListener('click', async () => {
+    // Unmute & restart video
+    unmuteBtn.addEventListener('click', async () => {
       try {
         await player.setVolume(1);
+        await player.setCurrentTime(0);
         await player.play();
-        playOverlay.style.display = 'none';
+        unmuteBtn.style.opacity = '0';
+        setTimeout(() => unmuteBtn.remove(), 300);
       } catch(err) {
-        console.error('Vimeo play error:', err);
+        console.error('Vimeo error:', err);
       }
+    });
+
+    // Ensure autoplay works
+    player.on('loaded', () => {
+      player.play().catch(err => console.warn('Autoplay prevented:', err));
     });
 
     // Copy referral code
@@ -221,21 +214,9 @@
       gtag('event', 'click_install', { 'platform': 'iOS' });
     });
 
-    // Visitor Counter: Increment immediately and display
-    const namespace = 'walktaskrewardshub';
-    const key = 'visits';
-    fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-      .then(res => res.json())
-      .then(data => {
-        visitorCountEl.textContent = data.value;
-        gtag('event', 'visitor_count', { 'count': data.value });
-      })
-      .catch(err => console.error('Visitor counter error:', err));
-
-    // Autoplay video muted for desktop fallback
-    player.on('loaded', () => {
-      player.play().catch(err => console.warn('Autoplay prevented:', err));
-    });
+    // Social proof number (static)
+    const socialProofNumber = 2345; // <-- change this to any number you want
+    visitorCountEl.textContent = socialProofNumber;
   </script>
 
 </body>
