@@ -179,14 +179,14 @@
     const iosBtn = document.getElementById('iosBtn');
     const visitorCountEl = document.getElementById('visitorCount');
 
-    // Unmute & restart video (fixed)
+    // Unmute & hide button reliably
     unmuteBtn.addEventListener('click', async () => {
       try {
         await player.setVolume(1);
-        await player.play();
+        await player.play().catch(() => console.warn('Autoplay prevented on mobile.'));
         unmuteBtn.style.opacity = '0';
         setTimeout(() => {
-          if (unmuteBtn.parentNode) unmuteBtn.remove();
+          if(unmuteBtn && unmuteBtn.parentNode) unmuteBtn.parentNode.removeChild(unmuteBtn);
         }, 500);
       } catch(err) {
         console.error('Vimeo error:', err);
